@@ -2,6 +2,7 @@
 #include "FlowWindow.h"
 #include "FlowStyle.h"
 #include "FlowWindowHub.h"
+#include "IconManager.h"
 
 namespace flowUI {
 	FlowManager::FlowManager(FlowWindow* window)
