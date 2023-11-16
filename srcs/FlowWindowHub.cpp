@@ -7,7 +7,8 @@ namespace flowUI {
 			int size = FlowWindowHub::getInstance()->windows.size();
 			if (size < INT_MAX - 1) {
 				FlowWindowHub::getInstance()->windows.add(window);
-				window->setName(juce::translate("Window") + " " + juce::String(size + 1));
+				window->setName(FlowWindowHub::getInstance()->title + " - " 
+					+ juce::translate("Window") + " " + juce::String(size + 1));
 				window->setIcon(FlowWindowHub::getInstance()->iconTemp);
 				window->getPeer()->setIcon(FlowWindowHub::getInstance()->iconTemp);
 				window->setOpenGL(FlowWindowHub::getInstance()->openGLOn);
@@ -26,7 +27,8 @@ namespace flowUI {
 		int size = FlowWindowHub::getInstance()->windows.size();
 		for (int i = 0; i < size; i++) {
 			if (auto w = FlowWindowHub::getInstance()->windows[i]) {
-				w->setName(juce::translate("Window") + " " + juce::String(i + 1));
+				w->setName(FlowWindowHub::getInstance()->title + " - "
+					+ juce::translate("Window") + " " + juce::String(i + 1));
 			}
 		}
 		FlowWindowHub::setToolBar(
@@ -80,6 +82,18 @@ namespace flowUI {
 		for (auto i : FlowWindowHub::getInstance()->windows) {
 			i->setIcon(FlowWindowHub::getInstance()->iconTemp);
 			i->getPeer()->setIcon(FlowWindowHub::getInstance()->iconTemp);
+		}
+	}
+
+	void FlowWindowHub::setTitle(const juce::String& title) {
+		FlowWindowHub::getInstance()->title = title;
+
+		int size = FlowWindowHub::getInstance()->windows.size();
+		for (int i = 0; i < size; i++) {
+			if (auto w = FlowWindowHub::getInstance()->windows[i]) {
+				w->setName(FlowWindowHub::getInstance()->title + " - "
+					+ juce::translate("Window") + " " + juce::String(i + 1));
+			}
 		}
 	}
 

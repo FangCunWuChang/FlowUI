@@ -23,6 +23,7 @@ namespace flowUI {
 		static void shutdown();
 
 		static void setIcon(const juce::String& iconPath);
+		static void setTitle(const juce::String& title);
 
 		static void autoLayout(const juce::String& layoutPath, const juce::Array<FlowComponent*>& list);
 		static void saveLayout(const juce::String& layoutPath, const juce::Array<FlowComponent*>& list);
@@ -34,6 +35,7 @@ namespace flowUI {
 		FlowComponent* toolBar = nullptr;
 		double toolBarSize = 0;
 		juce::Image iconTemp;
+		juce::String title;
 		bool openGLOn = false;
 
 	private:
