@@ -129,18 +129,18 @@ namespace flowUI {
 
 
 	private:
-		float titleHeight = 0.024;						/**< Container title bar height (vertical mode) */
-		float titleWidth = 0.012;						/**< Container title bar width (horizontal mode) */
-		float titleBorderHeight = 0.004;				/**< Container title bar top border height (vertical mode) */
-		float titleBorderWidth = 0.0024;				/**< Container title bar left border width (horizontal mode) */
-		float titleSplitWidth = 0.0005;					/**< Container title bar tab split line width (vertical mode) */
-		float titleSplitHeight = 0.00065;				/**< Container title bar tab split line height (horizontal mode) */
+		float titleHeight = 0.03;						/**< Container title bar height (vertical mode) */
+		float titleWidth = 0.015;						/**< Container title bar width (horizontal mode) */
+		float titleBorderHeight = 0.005;				/**< Container title bar top border height (vertical mode) */
+		float titleBorderWidth = 0.003;					/**< Container title bar left border width (horizontal mode) */
+		float titleSplitWidth = 0.00075;				/**< Container title bar tab split line width (vertical mode) */
+		float titleSplitHeight = 0.000975;				/**< Container title bar tab split line height (horizontal mode) */
 		float titleSplitVLength = 0.0125;				/**< Container title bar tab split line length (vertical mode) */
 		float titleSplitHLength = 0.00625;				/**< Container title bar tab split line length (horizontal mode) */
-		float titleTextHeight = 0.016;					/**< Container title bar tab title text height (vertical mode) */
-		float titleTextWidth = 0.008;					/**< Container title bar tab title text width (horizontal mode) */
-		float titleTextPaddingWidth = 0.008;			/**< Container title bar tab title text padding width (vertical mode) */
-		float titleTextPaddingHeight = 0.012;			/**< Container title bar tab title text padding height (horizontal mode) */
+		float titleTextHeight = 0.02;					/**< Container title bar tab title text height (vertical mode) */
+		float titleTextWidth = 0.01;					/**< Container title bar tab title text width (horizontal mode) */
+		float titleTextPaddingWidth = 0.01;				/**< Container title bar tab title text padding width (vertical mode) */
+		float titleTextPaddingHeight = 0.015;			/**< Container title bar tab title text padding height (horizontal mode) */
 		juce::Colour titleBackgroundColor
 			= juce::Colours::darkgrey;					/**< Container title bar tab fill color (not active) */
 		juce::Colour titleHighlightColor
