@@ -16,6 +16,9 @@ namespace flowUI {
 		static void setToolBar(FlowComponent* toolBar, double size);
 		static void removeToolBar();
 
+		static void addKeyListener(juce::KeyListener* listener);
+		static void removeKeyListener(juce::KeyListener* listener);
+
 		static int getSize();
 		static int findWindow(FlowWindow* window);
 		static FlowWindow* getWindow(int index);
@@ -33,6 +36,7 @@ namespace flowUI {
 	private:
 		juce::OwnedArray<FlowWindow> windows;
 		FlowComponent* toolBar = nullptr;
+		juce::Array<juce::KeyListener*> keyListeners;
 		double toolBarSize = 0;
 		juce::Image iconTemp;
 		juce::String title;

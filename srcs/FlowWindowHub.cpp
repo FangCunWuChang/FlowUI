@@ -7,11 +7,16 @@ namespace flowUI {
 			int size = FlowWindowHub::getInstance()->windows.size();
 			if (size < INT_MAX - 1) {
 				FlowWindowHub::getInstance()->windows.add(window);
+
 				window->setName(FlowWindowHub::getInstance()->title + " - " 
 					+ juce::translate("Window") + " " + juce::String(size + 1));
 				window->setIcon(FlowWindowHub::getInstance()->iconTemp);
 				window->getPeer()->setIcon(FlowWindowHub::getInstance()->iconTemp);
 				window->setOpenGL(FlowWindowHub::getInstance()->openGLOn);
+
+				for (auto i : FlowWindowHub::getInstance()->keyListeners) {
+					window->addKeyListener(i);
+				}
 			}
 			else {
 				delete window;
@@ -54,6 +59,33 @@ namespace flowUI {
 		if (FlowWindowHub::getInstance()->getSize() > 0) {
 			if (auto window = FlowWindowHub::getInstance()->getWindow(0)) {
 				window->removeToolBar();
+			}
+		}
+	}
+
+	void FlowWindowHub::addKeyListener(juce::KeyListener* listener) {
+		if (!listener) { return; }
+		if (FlowWindowHub::getInstance()->keyListeners.contains(listener)) { return; }
+
+		FlowWindowHub::getInstance()->keyListeners.add(listener);
+
+		int size = FlowWindowHub::getInstance()->windows.size();
+		for (int i = 0; i < size; i++) {
+			if (auto w = FlowWindowHub::getInstance()->windows[i]) {
+				w->addKeyListener(listener);
+			}
+		}
+	}
+
+	void FlowWindowHub::removeKeyListener(juce::KeyListener* listener) {
+		if (!listener) { return; }
+
+		FlowWindowHub::getInstance()->keyListeners.removeAllInstancesOf(listener);
+
+		int size = FlowWindowHub::getInstance()->windows.size();
+		for (int i = 0; i < size; i++) {
+			if (auto w = FlowWindowHub::getInstance()->windows[i]) {
+				w->removeKeyListener(listener);
 			}
 		}
 	}
