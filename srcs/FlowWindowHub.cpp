@@ -212,6 +212,14 @@ namespace flowUI {
 		}
 	}
 
+	void FlowWindowHub::setAppExitHook(const FlowWindowHub::AppExitHook& hook) {
+		FlowWindowHub::getInstance()->appExitHook = hook;
+	}
+
+	const FlowWindowHub::AppExitHook& FlowWindowHub::getAppExitHook() {
+		return FlowWindowHub::getInstance()->appExitHook;
+	}
+
 	FlowWindowHub* FlowWindowHub::getInstance() {
 		return FlowWindowHub::instance;
 	}

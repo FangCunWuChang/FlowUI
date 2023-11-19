@@ -143,7 +143,9 @@ namespace flowUI {
 
 	void FlowWindow::closeButtonPressed() {
 		if (FlowWindowHub::getSize() <= 1) {
-			juce::JUCEApplication::getInstance()->systemRequestedQuit();
+			if (FlowWindowHub::getAppExitHook()()) {
+				juce::JUCEApplication::getInstance()->systemRequestedQuit();
+			}
 		}
 		else {
 			delete this;

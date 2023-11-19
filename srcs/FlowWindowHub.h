@@ -33,6 +33,10 @@ namespace flowUI {
 
 		static void setOpenGL(bool openGLOn);
 
+		using AppExitHook = std::function<bool(void)>;
+		static void setAppExitHook(const AppExitHook& hook);
+		static const AppExitHook& getAppExitHook();
+
 	private:
 		juce::OwnedArray<FlowWindow> windows;
 		FlowComponent* toolBar = nullptr;
@@ -41,6 +45,7 @@ namespace flowUI {
 		juce::Image iconTemp;
 		juce::String title;
 		bool openGLOn = false;
+		AppExitHook appExitHook = [] { return true; };
 
 	private:
 		static FlowWindowHub* getInstance();
