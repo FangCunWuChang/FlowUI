@@ -42,6 +42,7 @@ namespace flowUI {
 
 		void setResizerShown(bool resizerShown);
 		void setVertical(bool isVertical);
+		bool isVertical() const;
 		void setWindow(FlowWindow* window);
 
 		void autoLayout(const juce::var& grid, const juce::Array<FlowComponent*>& list);
@@ -61,7 +62,7 @@ namespace flowUI {
 		void parentHierarchyChanged() override;
 
 	private:
-		bool isVertical = true;
+		bool vertical = true;
 		juce::Array<FlowComponent*> components;
 		int current = -1;
 		/** name, size, index */

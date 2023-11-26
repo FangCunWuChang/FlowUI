@@ -14,7 +14,7 @@ namespace flowUI {
 	}
 
 	FlowContainer::FlowContainer(FlowWindow* window, bool isVertical)
-		: FlowGridableUnit(window, true), isVertical(isVertical) {
+		: FlowGridableUnit(window, true), vertical(isVertical) {
 		this->setMouseCursor(juce::MouseCursor::DraggingHandCursor);
 
 		this->leftResizer
@@ -121,8 +121,12 @@ namespace flowUI {
 	}
 
 	void FlowContainer::setVertical(bool isVertical) {
-		this->isVertical = isVertical;
+		this->vertical = isVertical;
 		this->updateComponents();
+	}
+
+	bool FlowContainer::isVertical() const {
+		return this->vertical;
 	}
 
 	void FlowContainer::setWindow(FlowWindow* window) {
@@ -149,7 +153,7 @@ namespace flowUI {
 		this->components.clear();
 
 		/** Add Comps */
-		this->isVertical = grid["vertical"];
+		this->vertical = grid["vertical"];
 
 		auto id = grid.getProperty("id", juce::var());
 		if (!id.isArray()) {
@@ -180,7 +184,7 @@ namespace flowUI {
 	const juce::var FlowContainer::getLayout(const juce::Array<FlowComponent*>& list) const {
 		auto grid = new juce::DynamicObject{};
 
-		grid->setProperty("vertical", this->isVertical);
+		grid->setProperty("vertical", this->vertical);
 
 		juce::Array<juce::var> idList;
 		for (auto i : this->components) {
@@ -205,8 +209,8 @@ namespace flowUI {
 			{
 				juce::Rectangle<float> titleArea(
 					0, 0,
-					this->isVertical ? this->getWidth() : (FlowStyle::getTitleWidth() * screenSize.getWidth()),
-					this->isVertical ? (FlowStyle::getTitleHeight() * screenSize.getHeight()) : this->getHeight()
+					this->vertical ? this->getWidth() : (FlowStyle::getTitleWidth() * screenSize.getWidth()),
+					this->vertical ? (FlowStyle::getTitleHeight() * screenSize.getHeight()) : this->getHeight()
 				);
 				g.setColour(FlowStyle::getTitleBackgroundColor());
 				g.fillRect(titleArea);
@@ -216,14 +220,14 @@ namespace flowUI {
 			{
 				/** Size */
 				float paddingSize =
-					(this->isVertical ? FlowStyle::getTitleTextPaddingWidth() : FlowStyle::getTitleTextPaddingHeight())
-					* (this->isVertical ? screenSize.getWidth() : screenSize.getHeight());
-				float fontSize = (this->isVertical ? FlowStyle::getTitleTextHeight() : FlowStyle::getTitleTextWidth())
-					* (this->isVertical ? screenSize.getHeight() : screenSize.getWidth());
-				auto splitSize = this->isVertical
+					(this->vertical ? FlowStyle::getTitleTextPaddingWidth() : FlowStyle::getTitleTextPaddingHeight())
+					* (this->vertical ? screenSize.getWidth() : screenSize.getHeight());
+				float fontSize = (this->vertical ? FlowStyle::getTitleTextHeight() : FlowStyle::getTitleTextWidth())
+					* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
+				auto splitSize = this->vertical
 					? FlowStyle::getTitleSplitWidth() * screenSize.getWidth()
 					: FlowStyle::getTitleSplitHeight() * screenSize.getHeight();
-				auto splitLength = this->isVertical
+				auto splitLength = this->vertical
 					? FlowStyle::getTitleSplitVLength() * screenSize.getHeight()
 					: FlowStyle::getTitleSplitHLength() * screenSize.getWidth();
 
@@ -236,10 +240,10 @@ namespace flowUI {
 					/** Background */
 					auto& temp = this->tabSizeTemp.getReference(i);
 					juce::Rectangle<float> tabArea(
-						this->isVertical ? tabTotalSize : 0,
-						this->isVertical ? 0 : tabTotalSize,
-						this->isVertical ? std::get<1>(temp) : (FlowStyle::getTitleWidth() * screenSize.getWidth()),
-						this->isVertical ? (FlowStyle::getTitleHeight() * screenSize.getHeight()) : std::get<1>(temp)
+						this->vertical ? tabTotalSize : 0,
+						this->vertical ? 0 : tabTotalSize,
+						this->vertical ? std::get<1>(temp) : (FlowStyle::getTitleWidth() * screenSize.getWidth()),
+						this->vertical ? (FlowStyle::getTitleHeight() * screenSize.getHeight()) : std::get<1>(temp)
 					);
 					tabTotalSize += std::get<1>(temp);
 					if (i == this->current) {
@@ -249,7 +253,7 @@ namespace flowUI {
 
 					/** Border */
 					if (i == this->current) {
-						juce::Rectangle<float> borderArea = (this->isVertical)
+						juce::Rectangle<float> borderArea = (this->vertical)
 							? tabArea.withHeight(FlowStyle::getTitleBorderHeight() * screenSize.getHeight())
 							: tabArea.withWidth(FlowStyle::getTitleBorderWidth() * screenSize.getWidth());
 						g.setColour(FlowStyle::getTitleBorderColor());
@@ -257,7 +261,7 @@ namespace flowUI {
 					}
 
 					/** Text */
-					if (this->isVertical) {
+					if (this->vertical) {
 						juce::Rectangle<float> textArea = tabArea
 							.withTrimmedLeft(paddingSize).withTrimmedRight(paddingSize);
 						if (textArea.getWidth() < 0) { textArea.setWidth(0); }
@@ -284,10 +288,10 @@ namespace flowUI {
 					/** Split Line */
 					if (i != this->current && (i + 1) != this->current) {
 						juce::Rectangle<float> splitRect(
-							this->isVertical ? tabTotalSize - splitSize / 2 : (FlowStyle::getTitleWidth() * screenSize.getWidth()) / 2 - splitLength / 2,
-							this->isVertical ? (FlowStyle::getTitleHeight() * screenSize.getHeight()) / 2 - splitLength / 2 : tabTotalSize - splitSize / 2,
-							this->isVertical ? splitSize : splitLength,
-							this->isVertical ? splitLength : splitSize
+							this->vertical ? tabTotalSize - splitSize / 2 : (FlowStyle::getTitleWidth() * screenSize.getWidth()) / 2 - splitLength / 2,
+							this->vertical ? (FlowStyle::getTitleHeight() * screenSize.getHeight()) / 2 - splitLength / 2 : tabTotalSize - splitSize / 2,
+							this->vertical ? splitSize : splitLength,
+							this->vertical ? splitLength : splitSize
 						);
 						g.setColour(FlowStyle::getTitleSplitColor());
 						g.fillRect(splitRect);
@@ -313,8 +317,8 @@ namespace flowUI {
 		auto screenSize = this->window->getScreenSize();
 
 		/** Title Size */
-		float titleSize = (this->isVertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
-			* (this->isVertical ? screenSize.getHeight() : screenSize.getWidth());
+		float titleSize = (this->vertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
+			* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
 
 		/** Left / Right Button */
 		if (event.mods.isLeftButtonDown() || event.mods.isRightButtonDown()) {
@@ -327,10 +331,10 @@ namespace flowUI {
 			for (int i = 0; i < this->tabSizeTemp.size(); i++) {
 				auto tabSize = std::get<1>(this->tabSizeTemp.getReference(i));
 				juce::Rectangle<float> tabArea(
-					this->isVertical ? totalSize : 0,
-					this->isVertical ? 0 : totalSize,
-					this->isVertical ? tabSize : titleSize,
-					this->isVertical ? titleSize : tabSize
+					this->vertical ? totalSize : 0,
+					this->vertical ? 0 : totalSize,
+					this->vertical ? tabSize : titleSize,
+					this->vertical ? titleSize : tabSize
 				);
 
 				if (tabArea.contains(event.getPosition().toFloat())) {
@@ -356,8 +360,8 @@ namespace flowUI {
 		auto screenSize = this->window->getScreenSize();
 
 		/** Title Size */
-		float titleSize = (this->isVertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
-			* (this->isVertical ? screenSize.getHeight() : screenSize.getWidth());
+		float titleSize = (this->vertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
+			* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
 
 		/** Left Button */
 		if (event.mods.isLeftButtonDown()) {
@@ -378,10 +382,10 @@ namespace flowUI {
 				for (int i = 0; i < this->tabSizeTemp.size(); i++) {
 					auto tabSize = std::get<1>(this->tabSizeTemp.getReference(i));
 					juce::Rectangle<float> tabArea(
-						this->isVertical ? totalSize : 0,
-						this->isVertical ? 0 : totalSize,
-						this->isVertical ? tabSize : titleSize,
-						this->isVertical ? titleSize : tabSize
+						this->vertical ? totalSize : 0,
+						this->vertical ? 0 : totalSize,
+						this->vertical ? tabSize : titleSize,
+						this->vertical ? titleSize : tabSize
 					);
 
 					if (tabArea.contains(event.getPosition().toFloat())) {
@@ -404,10 +408,10 @@ namespace flowUI {
 				for (int i = 0; i < this->tabSizeTemp.size(); i++) {
 					auto tabSize = std::get<1>(this->tabSizeTemp.getReference(i));
 					juce::Rectangle<float> tabArea(
-						this->isVertical ? totalSize : 0,
-						this->isVertical ? 0 : totalSize,
-						this->isVertical ? tabSize : titleSize,
-						this->isVertical ? titleSize : tabSize
+						this->vertical ? totalSize : 0,
+						this->vertical ? 0 : totalSize,
+						this->vertical ? tabSize : titleSize,
+						this->vertical ? titleSize : tabSize
 					);
 
 					if (tabArea.contains(event.getPosition().toFloat())) {
@@ -431,8 +435,8 @@ namespace flowUI {
 		auto screenSize = this->window->getScreenSize();
 
 		/** Title Size */
-		float titleSize = (this->isVertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
-			* (this->isVertical ? screenSize.getHeight() : screenSize.getWidth());
+		float titleSize = (this->vertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
+			* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
 
 		/** Mouse Cursor */
 		{
@@ -440,10 +444,10 @@ namespace flowUI {
 			for (int i = 0; i < this->tabSizeTemp.size(); i++) {
 				auto tabSize = std::get<1>(this->tabSizeTemp.getReference(i));
 				juce::Rectangle<float> tabArea(
-					this->isVertical ? totalSize : 0,
-					this->isVertical ? 0 : totalSize,
-					this->isVertical ? tabSize : titleSize,
-					this->isVertical ? titleSize : tabSize
+					this->vertical ? totalSize : 0,
+					this->vertical ? 0 : totalSize,
+					this->vertical ? tabSize : titleSize,
+					this->vertical ? titleSize : tabSize
 				);
 
 				if (tabArea.contains(event.getPosition().toFloat())) {
@@ -500,7 +504,7 @@ namespace flowUI {
 		/** Component Size */
 		{
 			juce::Rectangle<int> componentBounds = this->getLocalBounds();
-			if (this->isVertical) {
+			if (this->vertical) {
 				int titleHeight = FlowStyle::getTitleHeight() * this->window->getScreenSize().getHeight();
 				componentBounds.removeFromTop(titleHeight);
 			}
@@ -522,13 +526,13 @@ namespace flowUI {
 		{
 			/** Get Size */
 			float paddingSize =
-				(this->isVertical ? FlowStyle::getTitleTextPaddingWidth() : FlowStyle::getTitleTextPaddingHeight())
-				* (this->isVertical ? screenSize.getWidth() : screenSize.getHeight());
-			float fontSize = (this->isVertical ? FlowStyle::getTitleTextHeight() : FlowStyle::getTitleTextWidth())
-				* (this->isVertical ? screenSize.getHeight() : screenSize.getWidth());
-			float titleLongSideSize = (this->isVertical ? this->getWidth() : this->getHeight());
-			float titleShortSideSize = (this->isVertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
-				* (this->isVertical ? screenSize.getHeight() : screenSize.getWidth());
+				(this->vertical ? FlowStyle::getTitleTextPaddingWidth() : FlowStyle::getTitleTextPaddingHeight())
+				* (this->vertical ? screenSize.getWidth() : screenSize.getHeight());
+			float fontSize = (this->vertical ? FlowStyle::getTitleTextHeight() : FlowStyle::getTitleTextWidth())
+				* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
+			float titleLongSideSize = (this->vertical ? this->getWidth() : this->getHeight());
+			float titleShortSideSize = (this->vertical ? FlowStyle::getTitleHeight() : FlowStyle::getTitleWidth())
+				* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
 
 			/** Get Font */
 			juce::Font font(fontSize);
@@ -661,7 +665,7 @@ namespace flowUI {
 		bool isTab = tabIndex >= 0 && tabIndex < this->components.size();
 		bool isFree = dynamic_cast<FlowManager*>(this->getParentComponent());
 		bool isMulti = this->components.size() > 1;
-		bool isVertical = this->isVertical;
+		bool isVertical = this->vertical;
 
 		auto windowCallback = [window = this->window, tabIndex, isTab, this](int windowIndex) {
 			int windowSize = FlowWindowHub::getSize();

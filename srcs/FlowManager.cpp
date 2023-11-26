@@ -79,8 +79,13 @@ namespace flowUI {
 	}
 
 	void FlowManager::releaseComponent(FlowComponent* comp) {
+		auto container = this->findComponent(comp);
+		if (!container) { return; }
+
+		bool vertical = container->isVertical();
+
 		this->closeComponent(comp);
-		this->openComponent(comp);
+		this->openComponent(comp, vertical);
 	}
 
 	void FlowManager::releaseContainer(FlowContainer* container) {
