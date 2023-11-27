@@ -30,7 +30,7 @@ namespace flowUI {
 	class FlowContainer : public FlowGridableUnit {
 	public:
 		FlowContainer() = delete;
-		FlowContainer(FlowWindow* window, bool isVertical = true);
+		FlowContainer(FlowWindow* window, bool isVertical = true, bool adsorbable = true);
 
 		void add(FlowComponent* comp, bool show = true);
 		void remove(FlowComponent* comp);
@@ -44,6 +44,8 @@ namespace flowUI {
 		void setVertical(bool isVertical);
 		bool isVertical() const;
 		void setWindow(FlowWindow* window);
+		void setAdsorbable(bool adsorbable);
+		bool isAdsorbable() const;
 
 		void autoLayout(const juce::var& grid, const juce::Array<FlowComponent*>& list);
 		const juce::var getLayout(const juce::Array<FlowComponent*>& list) const;
@@ -63,6 +65,7 @@ namespace flowUI {
 
 	private:
 		bool vertical = true;
+		bool adsorbable = true;
 		juce::Array<FlowComponent*> components;
 		int current = -1;
 		/** name, size, index */

@@ -14,7 +14,7 @@ namespace flowUI {
 		void addContainer(FlowContainer* container);
 		bool removeContainer(FlowContainer* container);
 
-		void openComponent(FlowComponent* comp, bool vertical = true);
+		void openComponent(FlowComponent* comp, bool vertical = true, bool adsorbable = false);
 		void closeComponent(FlowComponent* comp);
 		void releaseComponent(FlowComponent* comp);
 		void releaseContainer(FlowContainer* container);

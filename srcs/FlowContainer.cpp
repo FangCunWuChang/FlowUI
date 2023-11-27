@@ -13,8 +13,8 @@ namespace flowUI {
 		return this->isContainer;
 	}
 
-	FlowContainer::FlowContainer(FlowWindow* window, bool isVertical)
-		: FlowGridableUnit(window, true), vertical(isVertical) {
+	FlowContainer::FlowContainer(FlowWindow* window, bool isVertical, bool adsorbable)
+		: FlowGridableUnit(window, true), vertical(isVertical), adsorbable(adsorbable) {
 		this->setMouseCursor(juce::MouseCursor::DraggingHandCursor);
 
 		this->leftResizer
@@ -140,6 +140,14 @@ namespace flowUI {
 		this->bottomLeftResizer->setWindow(window);
 		this->bottomRightResizer->setWindow(window);
 		this->updateComponents();
+	}
+
+	void FlowContainer::setAdsorbable(bool adsorbable) {
+		this->adsorbable = adsorbable;
+	}
+
+	bool FlowContainer::isAdsorbable() const {
+		return this->adsorbable;
 	}
 
 	void FlowContainer::autoLayout(const juce::var& grid, const juce::Array<FlowComponent*>& list) {

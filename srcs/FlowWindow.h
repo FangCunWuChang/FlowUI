@@ -12,7 +12,7 @@ namespace flowUI {
 		FlowManager* getManager() const;
 		const juce::Rectangle<int> getScreenSize() const;
 
-		void openComponent(FlowComponent* comp, bool vertical = true);
+		void openComponent(FlowComponent* comp, bool vertical = true, bool adsorbable = true);
 		void closeComponent(FlowComponent* comp);
 		bool hasComponent(FlowComponent* comp) const;
 

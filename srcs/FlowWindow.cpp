@@ -111,8 +111,8 @@ namespace flowUI {
 		return result;
 	}
 
-	void FlowWindow::openComponent(FlowComponent* comp, bool vertical) {
-		this->getManager()->openComponent(comp, vertical);
+	void FlowWindow::openComponent(FlowComponent* comp, bool vertical, bool adsorbable) {
+		this->getManager()->openComponent(comp, vertical, adsorbable);
 	}
 
 	void FlowWindow::closeComponent(FlowComponent* comp) {
