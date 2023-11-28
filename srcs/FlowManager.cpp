@@ -144,7 +144,8 @@ namespace flowUI {
 
 		container->toFront(true);
 
-		if ((!this->baseRect.contains(this->currentPoint)) && this->movingContainer->isAdsorbable()) {
+		if ((!this->baseRect.contains(this->currentPoint)) &&
+			this->movingContainer && this->movingContainer->isAdsorbable()) {
 			this->baseRect = this->grid->findAdsorbRect(this->currentPoint);
 		}
 
@@ -162,7 +163,8 @@ namespace flowUI {
 		if (this->currentPoint.getX() > this->getWidth()) { this->currentPoint.setX(this->getWidth()); }
 		if (this->currentPoint.getY() > this->getHeight()) { this->currentPoint.setY(this->getHeight()); }
 
-		if ((!this->baseRect.contains(this->currentPoint)) && this->movingContainer->isAdsorbable()) {
+		if ((!this->baseRect.contains(this->currentPoint)) &&
+			this->movingContainer && this->movingContainer->isAdsorbable()) {
 			this->baseRect = this->grid->findAdsorbRect(this->currentPoint);
 		}
 
@@ -226,7 +228,7 @@ namespace flowUI {
 
 		if (this->movingContainer) {
 			if (rectLeft.contains(this->currentPoint.toFloat()) &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (!this->grid->addContainerOutside(this->movingContainer, FlowGrid::ContainerAddPlace::Left)) {
@@ -235,7 +237,7 @@ namespace flowUI {
 				}
 			}
 			else if (rectRight.contains(this->currentPoint.toFloat()) &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (!this->grid->addContainerOutside(this->movingContainer, FlowGrid::ContainerAddPlace::Right)) {
@@ -244,7 +246,7 @@ namespace flowUI {
 				}
 			}
 			else if (rectTop.contains(this->currentPoint.toFloat()) &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (!this->grid->addContainerOutside(this->movingContainer, FlowGrid::ContainerAddPlace::Top)) {
@@ -253,7 +255,7 @@ namespace flowUI {
 				}
 			}
 			else if (rectBottom.contains(this->currentPoint.toFloat()) &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (!this->grid->addContainerOutside(this->movingContainer, FlowGrid::ContainerAddPlace::Bottom)) {
@@ -263,7 +265,7 @@ namespace flowUI {
 			}
 			else if (rectAdsorbCenter.contains(this->currentPoint.toFloat()) &&
 				this->baseRect.getWidth() > 0 && this->baseRect.getHeight() > 0 &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (adsorbContainer) {
@@ -281,7 +283,7 @@ namespace flowUI {
 			}
 			else if (rectAdsorbLeft.contains(this->currentPoint.toFloat()) &&
 				this->baseRect.getWidth() > 0 && this->baseRect.getHeight() > 0 &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (adsorbContainer) {
@@ -299,7 +301,7 @@ namespace flowUI {
 			}
 			else if (rectAdsorbRight.contains(this->currentPoint.toFloat()) &&
 				this->baseRect.getWidth() > 0 && this->baseRect.getHeight() > 0 &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (adsorbContainer) {
@@ -317,7 +319,7 @@ namespace flowUI {
 			}
 			else if (rectAdsorbTop.contains(this->currentPoint.toFloat()) &&
 				this->baseRect.getWidth() > 0 && this->baseRect.getHeight() > 0 &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (adsorbContainer) {
@@ -335,7 +337,7 @@ namespace flowUI {
 			}
 			else if (rectAdsorbBottom.contains(this->currentPoint.toFloat()) &&
 				this->baseRect.getWidth() > 0 && this->baseRect.getHeight() > 0 &&
-				this->movingContainer->isAdsorbable()) {
+				this->movingContainer && this->movingContainer->isAdsorbable()) {
 				this->freeContainers.removeObject(this->movingContainer, false);
 				this->removeChildComponent(this->movingContainer);
 				if (adsorbContainer) {
@@ -353,16 +355,18 @@ namespace flowUI {
 			}
 			else {
 				/** No Adsorb */
-				this->movingContainer->setTopLeftPosition(this->currentPoint + topLeftDistance);
-				auto containerBounds = this->movingContainer->getBounds();
-				if (containerBounds.getX() + containerBounds.getWidth() <= 0 ||
-					containerBounds.getX() >= this->getWidth() ||
-					containerBounds.getY() + containerBounds.getHeight() <= 0 ||
-					containerBounds.getY() >= this->getHeight()) {
-					this->movingContainer->centreWithSize(
-						containerBounds.getWidth(), containerBounds.getHeight());
+				if (this->movingContainer) {
+					this->movingContainer->setTopLeftPosition(this->currentPoint + topLeftDistance);
+					auto containerBounds = this->movingContainer->getBounds();
+					if (containerBounds.getX() + containerBounds.getWidth() <= 0 ||
+						containerBounds.getX() >= this->getWidth() ||
+						containerBounds.getY() + containerBounds.getHeight() <= 0 ||
+						containerBounds.getY() >= this->getHeight()) {
+						this->movingContainer->centreWithSize(
+							containerBounds.getWidth(), containerBounds.getHeight());
+					}
+					this->movingContainer->toFront(true);
 				}
-				this->movingContainer->toFront(true);
 			}
 		}
 
