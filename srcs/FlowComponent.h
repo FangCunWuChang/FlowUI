@@ -9,6 +9,8 @@ namespace flowUI {
 	public:
 		FlowComponent(const juce::String& name);
 
+		bool isOpened() const;
+
 	protected:
 		FlowWindow* getWindow() const;
 
