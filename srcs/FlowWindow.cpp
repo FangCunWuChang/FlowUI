@@ -15,6 +15,8 @@ namespace flowUI {
 		this->setResizable(true, false);
 		this->centreWithSize(800, 600);
 
+		this->toolTip = std::make_unique<juce::TooltipWindow>(this);
+
 		FlowWindowHub::addWindow(this);
 
 		this->getContentComponent()->setVisible(true);
