@@ -108,7 +108,7 @@ namespace flowUI {
 
 	void FlowWindowHub::setIcon(const juce::String& iconPath) {
 		juce::File iconFile = juce::File::getSpecialLocation(
-			juce::File::SpecialLocationType::currentApplicationFile).getParentDirectory().getChildFile(iconPath);
+			juce::File::SpecialLocationType::hostApplicationPath).getParentDirectory().getChildFile(iconPath);
 		FlowWindowHub::getInstance()->iconTemp = juce::ImageFileFormat::loadFrom(iconFile);
 
 		for (auto i : FlowWindowHub::getInstance()->windows) {
@@ -136,7 +136,7 @@ namespace flowUI {
 
 		/** Load Layout File */
 		juce::File layoutFile = juce::File::getSpecialLocation(
-			juce::File::SpecialLocationType::currentApplicationFile).getParentDirectory().getChildFile(layoutPath);
+			juce::File::SpecialLocationType::hostApplicationPath).getParentDirectory().getChildFile(layoutPath);
 		auto layoutData = juce::JSON::parse(layoutFile);
 
 		/** Error */
@@ -195,7 +195,7 @@ namespace flowUI {
 		juce::var layoutVar(layout);
 
 		juce::File layoutFile = juce::File::getSpecialLocation(
-			juce::File::SpecialLocationType::currentApplicationFile).getParentDirectory().getChildFile(layoutPath);
+			juce::File::SpecialLocationType::hostApplicationPath).getParentDirectory().getChildFile(layoutPath);
 		juce::FileOutputStream layoutStream(layoutFile);
 		if (!layoutStream.openedOk()) { return; }
 

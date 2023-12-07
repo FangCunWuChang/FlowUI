@@ -13,7 +13,7 @@ namespace flowUI {
 
 		/** Load File */
 		juce::File file = juce::File::getSpecialLocation(
-			juce::File::SpecialLocationType::currentApplicationFile).getParentDirectory().getChildFile(path);
+			juce::File::SpecialLocationType::hostApplicationPath).getParentDirectory().getChildFile(path);
 		auto str = file.loadFileAsString();
 
 		/** Parse File */
