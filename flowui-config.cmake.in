@@ -1,0 +1,5 @@
+﻿@PACKAGE_INIT@
+
+find_package (juce-host-dev-kit CONFIG REQUIRED)
+
+include("${CMAKE_CURRENT_LIST_DIR}/flowui-targets.cmake")

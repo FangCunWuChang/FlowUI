@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.15)
-project (FlowUI VERSION 1.0.0 LANGUAGES CXX C)
+project (flowui VERSION 1.0.0 LANGUAGES CXX C)
 
 if (NOT DEFINED CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
@@ -14,20 +14,72 @@ set (CMAKE_C_STANDARD_REQUIRED ON)
 
 set (CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")#MSVC下使用/MD和/MDd
 
+find_package (juce-host-dev-kit CONFIG REQUIRED)
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+set (FLOWUI_INSTALL_NAME ${PROJECT_NAME})
 
 set (FLOWUI_INC "${CMAKE_CURRENT_SOURCE_DIR}/srcs")
 
+# =======================================
+# Target
+# =======================================
 file (GLOB_RECURSE FLOWUI_SRC "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.h")
 add_library (libFlowUI STATIC ${FLOWUI_SRC})
-set_target_properties (libFlowUI PROPERTIES
-  PREFIX "lib" IMPORT_PREFIX "lib" OUTPUT_NAME "FlowUI")
-target_include_directories (libFlowUI PUBLIC ${FLOWUI_INC})
-target_link_libraries (libFlowUI PUBLIC libJUCE)
+target_link_libraries (libFlowUI PUBLIC juce-host-dev-kit::libJUCE)
 
-if (MSVC)
-    target_compile_definitions (libFlowUI PUBLIC "JUCE_DLL=1" "JUCE_DISABLE_DLL_ALLOCATORS=1")
-endif (MSVC)
+foreach (ITEM ${FLOWUI_INC})
+	file (RELATIVE_PATH ITEM_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${ITEM})
+	target_include_directories(libFlowUI PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${ITEM_PATH}>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${FLOWUI_INSTALL_NAME}/${ITEM_PATH}>"
+    )
+endforeach (ITEM ${FLOWUI_INC})
 
-if (DEFINED FLOWUI_OUTPUT)
-    set_target_properties (libFlowUI PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${FLOWUI_OUTPUT}")
-endif (DEFINED FLOWUI_OUTPUT)
+# ============================
+# Install
+# ============================
+set (FLOWUI_CMAKE_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${FLOWUI_INSTALL_NAME})
+
+install (TARGETS libFlowUI
+	EXPORT ${FLOWUI_INSTALL_NAME}Targets
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL
+	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" OPTIONAL
+	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" OPTIONAL
+)
+
+foreach (ITEM ${FLOWUI_INC})
+	file (GLOB_RECURSE HDR_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${ITEM}/*.h")
+
+	foreach (HDR_FILE ${HDR_FILES})
+		get_filename_component (HDR_DIR ${HDR_FILE} DIRECTORY)
+		install (FILES "${CMAKE_CURRENT_SOURCE_DIR}/${HDR_FILE}" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${FLOWUI_INSTALL_NAME}/${HDR_DIR}" OPTIONAL)
+	endforeach (HDR_FILE ${HDR_FILES})
+endforeach (ITEM ${FLOWUI_INC})
+
+write_basic_package_version_file (
+	"${CMAKE_CURRENT_BINARY_DIR}/${FLOWUI_INSTALL_NAME}-config-version.cmake"
+	VERSION ${PROJECT_VERSION}
+	COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file (
+	"${CMAKE_CURRENT_LIST_DIR}/${FLOWUI_INSTALL_NAME}-config.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/${FLOWUI_INSTALL_NAME}-config.cmake"
+	INSTALL_DESTINATION ${FLOWUI_CMAKE_CONFIG_INSTALL_DIR}
+	NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
+
+install (FILES
+	"${CMAKE_CURRENT_BINARY_DIR}/${FLOWUI_INSTALL_NAME}-config.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/${FLOWUI_INSTALL_NAME}-config-version.cmake"
+	DESTINATION ${FLOWUI_CMAKE_CONFIG_INSTALL_DIR}
+)
+
+install (EXPORT ${FLOWUI_INSTALL_NAME}Targets
+	FILE "${FLOWUI_INSTALL_NAME}-targets.cmake"
+	NAMESPACE ${FLOWUI_INSTALL_NAME}::
+	DESTINATION ${FLOWUI_CMAKE_CONFIG_INSTALL_DIR}
+)
