@@ -33,6 +33,8 @@
 
 # CMake Output
 [Oo]ut/**
+cmake-*/**
 
 # IDE Temp
 .vs/**
+.idea/**
