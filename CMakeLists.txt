@@ -14,19 +14,6 @@ set (CMAKE_C_STANDARD_REQUIRED ON)
 
 set (CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")#MSVC下使用/MD和/MDd
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set (COMPILE_DEBUG_DEF "DEBUG=1" "_DEBUG=1")
-else (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set (COMPILE_DEBUG_DEF "NDEBUG=1")
-endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
-if (WIN32)
-	set (COMPILE_SYS_DEF "WIN32=1" "WIN64=1")
-elseif (UNIX AND NOT APPLE)
-	set (COMPILE_SYS_DEF "LINUX=1")
-elseif (APPLE)
-	set (COMPILE_SYS_DEF "MACOS=1" "DARWIN=1")
-endif ()
-
 find_package (juce-host-dev-kit CONFIG REQUIRED)
 
 include(GNUInstallDirs)
@@ -41,7 +28,6 @@ set (FLOWUI_INC "${CMAKE_CURRENT_SOURCE_DIR}/srcs")
 # =======================================
 file (GLOB_RECURSE FLOWUI_SRC "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.h")
 add_library (flowui STATIC ${FLOWUI_SRC})
-target_compile_definitions (flowui PRIVATE ${COMPILE_DEBUG_DEF} ${COMPILE_SYS_DEF})
 target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-core)
 
 foreach (ITEM ${FLOWUI_INC})
