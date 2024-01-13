@@ -4,6 +4,8 @@
 namespace flowUI {
 	FlowWindowContent::FlowWindowContent(FlowWindow* parent)
 		: parent(parent) {
+		this->setWantsKeyboardFocus(true);
+
 		this->manager = std::make_unique<FlowManager>(parent);
 		this->addAndMakeVisible(this->manager.get());
 	}
