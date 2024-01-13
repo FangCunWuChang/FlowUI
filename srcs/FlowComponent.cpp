@@ -4,7 +4,9 @@
 
 namespace flowUI {
 	FlowComponent::FlowComponent(const juce::String& name)
-		: juce::Component(name) {}
+		: juce::Component(name) {
+		this->setWantsKeyboardFocus(true);
+	}
 
 	bool FlowComponent::isOpened() const {
 		return dynamic_cast<FlowContainer*>(this->getParentComponent());

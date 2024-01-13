@@ -7,6 +7,8 @@
 namespace flowUI {
 	FlowManager::FlowManager(FlowWindow* window)
 		: window(window) {
+		this->setWantsKeyboardFocus(true);
+
 		this->grid = std::make_unique<FlowGrid>(window);
 		this->addAndMakeVisible(this->grid.get());
 	}

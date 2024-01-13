@@ -7,6 +7,7 @@
 namespace flowUI {
 	FlowGridableUnit::FlowGridableUnit(FlowWindow* window, bool isContainer)
 		: window(window), isContainer(isContainer) {
+		this->setWantsKeyboardFocus(true);
 	}
 
 	bool FlowGridableUnit::thisIsContainer() const {
