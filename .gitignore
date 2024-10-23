@@ -38,3 +38,4 @@ cmake-*/**
 # IDE Temp
 .vs/**
 .idea/**
+CMakeSettings.json
