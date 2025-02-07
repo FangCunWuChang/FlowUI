@@ -20,6 +20,7 @@ namespace flowUI {
 		const juce::var getLayout(const juce::Array<FlowComponent*>& list) const;
 
 		void setOpenGL(bool openGLOn);
+		void setBufferedPainting(bool shouldBuffered);
 
 	protected:
 		void closeButtonPressed() override;

@@ -143,6 +143,10 @@ namespace flowUI {
 		}
 	}
 
+	void FlowWindow::setBufferedPainting(bool shouldBuffered) {
+		this->setBufferedToImage(shouldBuffered);
+	}
+
 	void FlowWindow::closeButtonPressed() {
 		if (FlowWindowHub::getSize() <= 1) {
 			if (FlowWindowHub::getAppExitHook()()) {

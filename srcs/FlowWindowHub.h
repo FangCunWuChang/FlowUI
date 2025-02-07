@@ -32,6 +32,7 @@ namespace flowUI {
 		static void saveLayout(const juce::String& layoutPath, const juce::Array<FlowComponent*>& list);
 
 		static void setOpenGL(bool openGLOn);
+		static void setBufferedPainting(bool shouldBuffered);
 
 		using AppExitHook = std::function<bool(void)>;
 		static void setAppExitHook(const AppExitHook& hook);
@@ -45,6 +46,7 @@ namespace flowUI {
 		juce::Image iconTemp;
 		juce::String title;
 		bool openGLOn = false;
+		bool shouldBufferedPainting = false;
 		AppExitHook appExitHook = [] { return true; };
 
 	private:

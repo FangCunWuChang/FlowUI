@@ -13,6 +13,7 @@ namespace flowUI {
 				window->setIcon(FlowWindowHub::getInstance()->iconTemp);
 				window->getPeer()->setIcon(FlowWindowHub::getInstance()->iconTemp);
 				window->setOpenGL(FlowWindowHub::getInstance()->openGLOn);
+				window->setBufferedPainting(FlowWindowHub::getInstance()->shouldBufferedPainting);
 
 				for (auto i : FlowWindowHub::getInstance()->keyListeners) {
 					window->addKeyListener(i);
@@ -209,6 +210,13 @@ namespace flowUI {
 		FlowWindowHub::getInstance()->openGLOn = openGLOn;
 		for (auto i : FlowWindowHub::getInstance()->windows) {
 			i->setOpenGL(openGLOn);
+		}
+	}
+
+	void FlowWindowHub::setBufferedPainting(bool shouldBuffered) {
+		FlowWindowHub::getInstance()->shouldBufferedPainting = shouldBuffered;
+		for (auto i : FlowWindowHub::getInstance()->windows) {
+			i->setBufferedPainting(shouldBuffered);
 		}
 	}
 
