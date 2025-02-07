@@ -37,6 +37,7 @@ namespace flowUI {
 		mutable double currentScale = 1.;
 
 	private:
+		bool bufferedPainting = false;
 		std::unique_ptr<juce::OpenGLContext> openGLContext = nullptr;
 		std::unique_ptr<juce::TooltipWindow> toolTip = nullptr;
 

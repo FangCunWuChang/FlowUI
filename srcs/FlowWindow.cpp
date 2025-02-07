@@ -135,16 +135,31 @@ namespace flowUI {
 
 	void FlowWindow::setOpenGL(bool openGLOn) {
 		if (openGLOn) {
+			/** Remove Buffer */
+			if (this->bufferedPainting) {
+				this->setCachedComponentImage(nullptr);
+				this->setBufferedPainting(false);
+			}
+
 			this->openGLContext = std::make_unique<juce::OpenGLContext>();
 			this->openGLContext->attachTo(*this);
 		}
 		else {
 			this->openGLContext = nullptr;
+
+			/** Add Buffer */
+			if (this->bufferedPainting) {
+				this->setBufferedPainting(true);
+			}
 		}
 	}
 
 	void FlowWindow::setBufferedPainting(bool shouldBuffered) {
-		this->setBufferedToImage(shouldBuffered);
+		this->bufferedPainting = shouldBuffered;
+
+		if (!this->openGLContext) {
+			this->setBufferedToImage(shouldBuffered);
+		}
 	}
 
 	void FlowWindow::closeButtonPressed() {
