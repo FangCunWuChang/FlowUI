@@ -28,15 +28,18 @@ set (FLOWUI_INC "${CMAKE_CURRENT_SOURCE_DIR}/srcs")
 # =======================================
 file (GLOB_RECURSE FLOWUI_SRC "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.h")
 add_library (flowui STATIC ${FLOWUI_SRC})
-if (FLOWUI_USE_JUCE_FULL)
-	target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-full)
-else (FLOWUI_USE_JUCE_FULL)
-	target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-core)
-endif (FLOWUI_USE_JUCE_FULL)
+target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-core)
+
+add_library (flowui-full STATIC ${FLOWUI_SRC})
+target_link_libraries (flowui-full PUBLIC juce-host-dev-kit::juce-full)
 
 foreach (ITEM ${FLOWUI_INC})
 	file (RELATIVE_PATH ITEM_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${ITEM})
 	target_include_directories(flowui PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${ITEM_PATH}>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${FLOWUI_INSTALL_NAME}/${ITEM_PATH}>"
+    )
+	target_include_directories(flowui-full PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${ITEM_PATH}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${FLOWUI_INSTALL_NAME}/${ITEM_PATH}>"
     )
@@ -47,7 +50,7 @@ endforeach (ITEM ${FLOWUI_INC})
 # ============================
 set (FLOWUI_CMAKE_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${FLOWUI_INSTALL_NAME})
 
-install (TARGETS flowui
+install (TARGETS flowui flowui-full
 	EXPORT ${FLOWUI_INSTALL_NAME}Targets
 	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL
 	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" OPTIONAL
