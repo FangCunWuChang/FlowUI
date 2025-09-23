@@ -28,7 +28,11 @@ set (FLOWUI_INC "${CMAKE_CURRENT_SOURCE_DIR}/srcs")
 # =======================================
 file (GLOB_RECURSE FLOWUI_SRC "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/srcs/*.h")
 add_library (flowui STATIC ${FLOWUI_SRC})
-target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-core)
+if (FLOWUI_USE_JUCE_FULL)
+	target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-full)
+else (FLOWUI_USE_JUCE_FULL)
+	target_link_libraries (flowui PUBLIC juce-host-dev-kit::juce-core)
+endif (FLOWUI_USE_JUCE_FULL)
 
 foreach (ITEM ${FLOWUI_INC})
 	file (RELATIVE_PATH ITEM_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${ITEM})
