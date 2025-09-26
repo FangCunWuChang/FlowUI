@@ -551,7 +551,7 @@ namespace flowUI {
 			float totalSize = 0;
 			for (int i = 0; i < this->components.size(); i++) {
 				auto name = this->components.getUnchecked(i)->getName();
-				float fontSize = font.getStringWidthFloat(name);
+				float fontSize = std::ceil(juce::TextLayout::getStringWidth(font, name));
 				float tabSize = fontSize + paddingSize * 2;
 				this->tabSizeTemp.add(std::make_tuple(name, tabSize, i));
 				totalSize += tabSize;
