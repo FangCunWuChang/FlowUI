@@ -241,7 +241,7 @@ namespace flowUI {
 					: FlowStyle::getTitleSplitHLength() * screenSize.getWidth();
 
 				/** Font */
-				juce::Font font(fontSize);
+				juce::Font font(juce::FontOptions{fontSize});
 				g.setFont(font);
 
 				float tabTotalSize = 0;
@@ -544,7 +544,7 @@ namespace flowUI {
 				* (this->vertical ? screenSize.getHeight() : screenSize.getWidth());
 
 			/** Get Font */
-			juce::Font font(fontSize);
+			juce::Font font(juce::FontOptions{fontSize});
 
 			/** Get Tab Size */
 			this->tabSizeTemp.clear();
