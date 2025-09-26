@@ -275,7 +275,7 @@ namespace flowUI {
 							.withTrimmedLeft(paddingSize).withTrimmedRight(paddingSize);
 						if (textArea.getWidth() < 0) { textArea.setWidth(0); }
 						g.setColour((i == this->current) ? FlowStyle::getTitleTextHighlightColor() : FlowStyle::getTitleTextColor());
-						g.drawFittedText(std::get<0>(temp), textArea.toNearestInt(), juce::Justification::centred, 1, .9f);
+						g.drawFittedText(std::get<0>(temp), textArea.toNearestInt(), juce::Justification::centred, 1, .7f);
 					}
 					else {
 						juce::Rectangle<float> textArea = tabArea
@@ -290,7 +290,7 @@ namespace flowUI {
 						));
 						g.drawFittedText(std::get<0>(temp),
 							textArea.withZeroOrigin().transformedBy(juce::AffineTransform(0, 1, 0, 1, 0, 0)).toNearestInt(),
-							juce::Justification::centred, 1, .9f);
+							juce::Justification::centred, 1, .7f);
 						g.restoreState();
 					}
 
