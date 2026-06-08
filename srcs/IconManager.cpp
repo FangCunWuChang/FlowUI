@@ -1,4 +1,5 @@
 ﻿#include "IconManager.h"
+#include "FlowUtils.h"
 
 namespace flowUI {
 	std::unique_ptr<juce::Drawable> IconManager::getSVG(const juce::String& path) {
@@ -12,8 +13,7 @@ namespace flowUI {
 		}
 
 		/** Load File */
-		juce::File file = juce::File::getSpecialLocation(
-			juce::File::SpecialLocationType::hostApplicationPath).getParentDirectory().getChildFile(path);
+		juce::File file = resolveRuntimeAssetFile(path);
 		auto str = file.loadFileAsString();
 
 		/** Parse File */
