@@ -32,10 +32,11 @@
 *.app
 
 # CMake Output
-[Oo]ut/**
-cmake-*/**
+/[Oo]ut/**
+/cmake-*/**
+/[Bb]uild/**
 
 # IDE Temp
-.vs/**
-.idea/**
-CMakeSettings.json
+/.vs/**
+/.idea/**
+/CMakeSettings.json
