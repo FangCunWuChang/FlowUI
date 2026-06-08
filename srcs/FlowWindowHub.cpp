@@ -227,8 +227,9 @@ namespace flowUI {
 	}
 
 	FlowWindowHub* FlowWindowHub::getInstance() {
-		return FlowWindowHub::instance;
+		return FlowWindowHub::instance ? FlowWindowHub::instance
+			: (FlowWindowHub::instance = new FlowWindowHub{}) ;
 	}
 
-	FlowWindowHub* FlowWindowHub::instance = new FlowWindowHub();
+	FlowWindowHub* FlowWindowHub::instance = nullptr;
 }
