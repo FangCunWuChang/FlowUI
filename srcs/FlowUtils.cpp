@@ -3,17 +3,21 @@
 namespace flowUI {
 
 juce::File resolveRuntimeAssetFile(const juce::String& path) {
-#if JUCE_MAC
-	return juce::File::getSpecialLocation(juce::File::hostApplicationPath)
-		.getParentDirectory().getParentDirectory().getParentDirectory()
-		.getChildFile("./Contents/Resources/")
-		.getChildFile(path);
+	auto executableDir = juce::File::getSpecialLocation(juce::File::hostApplicationPath)
+		.getParentDirectory();
 
-#else //MAC_OS
-	return juce::File::getSpecialLocation(juce::File::hostApplicationPath)
-		.getSiblingFile(path);
+#if JUCE_MAC
+	auto baseDir = executableDir
+		.getParentDirectory().getParentDirectory()
+		.getChildFile("./Contents/Resources/");
+		
+	if(baseDir.isDirectory()){
+		return baseDir.getChildFile(path);
+	}
 
 #endif//MAC_OS
+
+	return executableDir.getChildFile(path);
 }
 
 }// namespace flowUI
